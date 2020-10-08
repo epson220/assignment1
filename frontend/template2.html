@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js</title>
+</head>
+<body>
+    <h1><a href="/">Node.js</a></h1>
+    <ul>
+        %
+    </ul>
+    <p>Create file</p>
+    <form action="http://localhost:3000/writefile" method="POST">
+        <input name="title" type="text">
+        <textarea name="description" type="text"></textarea>
+        <input type="submit" value="create file">
+    </form>
+    <h2>?</h2>
+    <p>$</p>
+    <script type="text/javascript">
+        function readfile(link){
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = "http://localhost:3000/readfile";
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = "file_name";
+            hiddenField.value = link.textContent;
+            form.appendChild(hiddenField);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</body>
+</html>
