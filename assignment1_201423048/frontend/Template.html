@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .d {
+            background-color: burlywood;
+        }
+        .f {
+            background-color: coral;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h3>폴더생성</h3>
+    <h3>파일생성</h3>
+
+    <table id='t'>
+        <tr>
+            <td>Name</td>
+            <td></td>
+            <td></td>
+            <td>file size</td>
+            <td>Modification date</td>
+        </tr>
+        <tr>
+            <td onclick="changeDir(this);">../</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        &
+    </table>
+
+    <h2>?</h2>
+    <!--read한 파일 제목-->
+    <p>$</p>
+    <!--read한 파일 내용-->
+
+    <p>디렉터리생성</p>
+    <form name="createDirec" method='POST'>
+        <input type="text" name="direcName">
+        <input type="submit" value="저장">
+    </form>
+
+    <p>파일생성</p>
+    <form name="fileEdit" method='POST'>
+        <label>파일이름</label>
+        <input type="text" name="fileName">
+        <label>파일내용</label>
+        <textarea name="fileContent"></textarea>
+        <label>생성날짜</label>
+        <input type="date" value='new Date()' name="createDate">
+        <input type="submit" value="저장">
+    </form>
+
+    <p>이름수정</p>
+    <form name="rename" method='POST'>
+        <label>파일이름</label>
+        <input type="text" name="newName">
+        <input type="hidden" name="originName">
+        <input type="submit" value="rename">
+    </form>
+
+    <script type="text/javascript">
+
+        function changeDir(link) {
+            console.log("call chageDir");
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = "http://localhost:3000/cd";
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = 'path_name';
+            hiddenField.value = link.textContent;
+            form.appendChild(hiddenField);
+            document.body.appendChild(form);
+            form.submit();
+
+        }
+
+        function readFile(link) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = "http://localhost:3000/readfile";
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = "file_name";
+            hiddenField.value = link.textContent;
+            form.appendChild(hiddenField);
+            document.body.appendChild(form);
+            form.submit();
+        }
+        function removeFile(link) {
+
+
+
+        }
+        function removeDir(link) {
+
+        }
+        function rename(link) {
+
+        }
+    </script>
+
+</body>
+
+</html>
