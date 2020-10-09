@@ -1,4 +1,4 @@
-tvar http = require('http');
+var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var path = require('path');
@@ -68,7 +68,7 @@ var app = http.createServer(function(request, response){
             fs.writeFile(file_path, description, function(err, data){
                 response.writeHead(302, {Location: 'http://localhost:3000/'});
                 response.end('success');
-                //response.redirect("/");
+                //response.redirect("/"); //redirect()는 express에서 쓰임 
             });
         });
     }
