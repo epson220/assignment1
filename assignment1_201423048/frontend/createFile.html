@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>파일생성화면</p>
+    <form method="POST" action="http://localhost:3000/writefile">
+        <p>파일이름</p>
+        <input type="text" name="title">
+        <p>파일내용</p>
+        <textarea cols="30" rows="10" name="description"></textarea>
+        <input type="submit" value="create file">
+    </form>
+</body>
+</html>

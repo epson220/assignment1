@@ -6,12 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-    <p>파일편집</p>
-    <form name="fileEdit" method='POST'>
-        <p>파일이름</p>
-        <input type="text" name="fileName">
-        <p>파일내용</p>
-        <textarea name="fileContent"></textarea>
+    <p>디렉터리생성</p>
+    <form name="createDirec" method='POST' action="http://localhost:3000/mkdir">
+        <label>디렉터리이름</label>
+        <input type="text" name="direcName">
         <input type="submit" value="저장">
     </form>
 </body>

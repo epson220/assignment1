@@ -12,24 +12,30 @@
         .f {
             background-color: coral;
         }
+
+        #upper {
+            background-color: burlywood;
+        }
     </style>
 </head>
 
 <body>
 
-    <h3>폴더생성</h3>
-    <h3>파일생성</h3>
+    <a href="http://localhost:3000/mkdirFormat">폴더생성버튼</a>
+    <a href="http://localhost:3000/writefileFormat">파일생성버튼</a>
 
     <table id='t'>
         <tr>
             <td>Name</td>
             <td></td>
             <td></td>
+            <td></td>
             <td>file size</td>
             <td>Modification date</td>
         </tr>
         <tr>
-            <td onclick="changeDir(this);">../</td>
+            <td onclick="changeDir(this);" id="upper">../</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -42,23 +48,6 @@
     <!--read한 파일 제목-->
     <p>$</p>
     <!--read한 파일 내용-->
-
-    <p>디렉터리생성</p>
-    <form name="createDirec" method='POST'>
-        <input type="text" name="direcName">
-        <input type="submit" value="저장">
-    </form>
-
-    <p>파일생성</p>
-    <form name="fileEdit" method='POST'>
-        <label>파일이름</label>
-        <input type="text" name="fileName">
-        <label>파일내용</label>
-        <textarea name="fileContent"></textarea>
-        <label>생성날짜</label>
-        <input type="date" value='new Date()' name="createDate">
-        <input type="submit" value="저장">
-    </form>
 
     <p>이름수정</p>
     <form name="rename" method='POST'>
@@ -97,8 +86,22 @@
             document.body.appendChild(form);
             form.submit();
         }
-        function removeFile(link) {
 
+        function updateFile(link) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = "http://localhost:3000/editfile"
+
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = "file_name";
+            hiddenField.value = link.parentNode.childNodes[0].textContent;
+            form.appendChild(hiddenField);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function removeFile(link) {
 
 
         }
@@ -108,6 +111,8 @@
         function rename(link) {
 
         }
+
+        
     </script>
 
 </body>
