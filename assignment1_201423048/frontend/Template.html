@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Web Directory</title>
     <style>
         .d {
             background-color: burlywood;
@@ -48,14 +48,6 @@
     <!--read한 파일 제목-->
     <p>$</p>
     <!--read한 파일 내용-->
-
-    <p>이름수정</p>
-    <form name="rename" method='POST'>
-        <label>파일이름</label>
-        <input type="text" name="newName">
-        <input type="hidden" name="originName">
-        <input type="submit" value="rename">
-    </form>
 
     <script type="text/javascript">
 
@@ -102,13 +94,25 @@
         }
 
         function removeFile(link) {
-
+            
 
         }
         function removeDir(link) {
 
         }
         function rename(link) {
+            
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = "http://localhost:3000/renameFormat";
+
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = "origin";
+            hiddenField.value = link.parentNode.childNodes[0].textContent;
+            form.appendChild(hiddenField);
+            document.body.appendChild(form);
+            form.submit();
 
         }
 

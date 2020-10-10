@@ -81,8 +81,8 @@ var app = http.createServer(function (request, response) {
             response.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
             response.write('<p>파일편집화면</p>');
             response.write('<form method="POST" action="http://localhost:3000/writefile">');
-            response.write('<p>파일이름</p>');
-            response.write('<input type="text" name="title" value = ' + file_name + ' >');
+            response.write('<h4>' + file_name + '</h4>');
+            response.write('<input type="hidden" name="title" value = ' + file_name + ' >');
             response.write('<p>파일내용</p>');
             response.write('<textarea name="description" type="text" cols="50" rows="20">' + fileContent + '</textarea>');
             response.write('<input type="submit" value="edit file">');
@@ -125,40 +125,40 @@ var app = http.createServer(function (request, response) {
                 console.log(file_path);
                 file_content = data;
                 response.writeHead(302, { Location: '/' }); // 'http://localhost:3000/'
-                response.end('success');
+                response.end('readfile success');
             });
         });
     }
     else if (pathname === '/writefileFormat') {
 
-        fs.readFile('../frontend/createFile.html', function(err, tmp1){
+        fs.readFile('../frontend/createFile.html', function (err, tmp1) {
             let html = tmp1.toString();
-            response.writeHead(200, {'Content-Type':'text/html'});
+            response.writeHead(200, { 'Content-Type': 'text/html' });
             response.end(html);
         });
     }
-    else if(pathname === '/writefile'){
+    else if (pathname === '/writefile') {
         console.log('writefile call');
         var body = '';
         var dir_name;
-        request.on('data', function(data){
+        request.on('data', function (data) {
             body = body + data;
         });
-        request.on('end', function(){
+        request.on('end', function () {
             var post = qs.parse(body);
             console.dir(post);
             var title = post.title;
             var description = post.description;
             var file_path = path.join(cur_path, title);
-            fs.writeFile(file_path, description, function(err, data){
+            fs.writeFile(file_path, description, function (err, data) {
                 file_content = description;
-                response.writeHead(302, {Location : '/'});
-                response.end('success');
+                response.writeHead(302, { Location: '/' });
+                response.end('write file success');
             });
         });
     }
-    else if (pathname === '/mkdirFormat'){
-        fs.readFile('../frontend/createDir.html', function(err, tmp2){
+    else if (pathname === '/mkdirFormat') {
+        fs.readFile('../frontend/createDir.html', function (err, tmp2) {
             let html = tmp2.toString();
             response.writeHead(200, { 'Content-Type': 'text/html' });
             response.end(html);
@@ -181,11 +181,11 @@ var app = http.createServer(function (request, response) {
             var dir1 = path.join(cur_path, dir_name);
             console.log(dir1);
             fs.mkdir(dir1, function (err) {
-                if(err) console.error(err);
+                if (err) console.error(err);
                 else console.log('mkdir success');
 
                 response.writeHead(302, { Location: '/' }); // 'http://localhost:3000/'
-                response.end('success');
+                response.end('mkdir success');
             });
         });
     }
@@ -195,8 +195,55 @@ var app = http.createServer(function (request, response) {
     else if (pathname === '/rmFile') {
 
     }
+    else if (pathname === '/renameFormat') {
+
+        var body = ''
+
+        request.on('data', function (data) {
+            body = body + data;
+        });
+
+        request.on('end', function () {
+            var post = qs.parse(body);
+            var origin = post.origin;
+            
+            response.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
+            response.write('<form method="POST" action="http://localhost:3000/rename" >');
+            response.write('<h4>이름변경</h4>');
+            response.write('<input type="text" name="renamed" value=' + origin + ' >');
+            response.write('<input type="hidden" name="origin" value=' + origin + ' >');
+            response.write('<input type="submit" value="저장" />');
+            response.write('</form>');
+            response.end();
+        });
+
+    }
     else if (pathname === '/rename') {
 
+        console.log('rename backend');
+
+        var body = '';
+
+        request.on('data', function (data) {
+            body = body + data;
+            console.log(body);
+        });
+
+        request.on('end', function () {
+            var post = qs.parse(body);
+            var renamed = post.renamed;
+            var origin = post.origin;
+
+            var file_path = path.join(cur_path, origin);
+            var new_file_path = path.join(cur_path, renamed);
+
+            //file_name = renamed;
+            fs.renameSync(file_path, new_file_path);
+
+            response.writeHead(302, { Location: '/' }); // 'http://localhost:3000/'
+            response.end('rename success');
+
+        });
     }
 
 });
