@@ -16,6 +16,14 @@
         #upper {
             background-color: burlywood;
         }
+
+        .t {
+            border: 1px solid;
+        }
+
+        td {
+            border: 1px solid;
+        }
     </style>
 </head>
 
@@ -30,8 +38,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>file size</td>
-            <td>Modification date</td>
+            <td>file_size</td>
+            <td>Modification_date</td>
         </tr>
         <tr>
             <td onclick="changeDir(this);" id="upper">../</td>
@@ -95,11 +103,33 @@
 
         function removeFile(link) {
             
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = "http://localhost:3000/rmFile";
 
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = "file_name";
+            hiddenField.value = link.parentNode.childNodes[0].textContent;
+            form.appendChild(hiddenField);
+            document.body.appendChild(form);
+            form.submit();
         }
+
         function removeDir(link) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = "http://localhost:3000/rmdir";
 
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = 'dirName';
+            hiddenField.value = link.parentNode.childNodes[0].textContent;
+            form.appendChild(hiddenField);
+            document.body.appendChild(form);
+            form.submit();
         }
+
         function rename(link) {
             
             const form = document.createElement('form');

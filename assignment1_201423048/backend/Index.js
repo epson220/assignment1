@@ -10,6 +10,37 @@ var file_content = "";
 var fileSize;
 var modi_date;
 
+var deleteDirRecursive = function(loc){
+
+    console.log('deleteDirRecursive called');
+
+    fs.readdirSync(loc).forEach(function(element){
+        if(fs.lstatSync(path.join(loc, element)).isDirectory()){
+            deleteDirRecursive(path.join(loc, element));
+        }
+        else if(fs.lstatSync(path.join(loc, element)).isFile()){
+            fs.unlinkSync(path.join(loc, element));
+
+        }
+    });
+
+    // fs.readdirSync(loc, { withFileTypes: true } ,function(err, data){
+    //     if(err){
+    //         console.error(err);
+    //     }
+    //     data.forEach(function(element){
+    //         if(element.isDirectory()){
+    //             deleteDirRecursive(path.join(loc, element.name));
+    //         }
+    //         else if(element.isFile()){
+    //             fs.unlinkSync(path.join(loc, element.name));
+    //         }
+    //     });
+    // });
+
+    fs.rmdirSync(loc);
+}
+
 var app = http.createServer(function (request, response) {
 
     var _url = request.url;
@@ -34,7 +65,7 @@ var app = http.createServer(function (request, response) {
                         dirInfo += "<tr class='d'><td onclick='changeDir(this);'>" + element.name + "</td>" +
                             "<td onclick='removeDir(this);'>delete</td>" +
                             "<td onclick='rename(this);'>rename</td>" +
-                            "<td></td>" +
+                            "<td>-</td>" +
                             "<td>-</td>" + "<td>" + modi_date + "</td></tr>";
                     }
                     else if (element.isFile()) {
@@ -152,6 +183,7 @@ var app = http.createServer(function (request, response) {
             var file_path = path.join(cur_path, title);
             fs.writeFile(file_path, description, function (err, data) {
                 file_content = description;
+                file_name = title;
                 response.writeHead(302, { Location: '/' });
                 response.end('write file success');
             });
@@ -191,8 +223,51 @@ var app = http.createServer(function (request, response) {
     }
     else if (pathname === '/rmdir') {
 
+        console.log('/rmdir pathname call');
+
+        var body = '';
+        var dir_name3;
+
+        request.on('data', function(data){
+            body = body + data;
+        });
+
+        request.on('end', function(){
+            var post = qs.parse(body);
+            dir_name3 = post.dirName;
+            console.log(dir_name3);
+            var dir_location = path.join(cur_path, dir_name3);
+            console.log(dir_location);
+
+            deleteDirRecursive(dir_location);
+
+            response.writeHead(302, {Location : '/'});
+            response.end();
+        });
+
     }
     else if (pathname === '/rmFile') {
+        console.log('rmFile pathname');
+
+        var body = '';
+        var file_name2;
+
+        request.on('data', function(data){
+            body = body + data;
+        });
+
+        request.on('end', function(){
+            var post = qs.parse(body);
+            file_name2 = post.file_name;
+            var file_location = path.join(cur_path, file_name2);
+            console.log(file_location);
+            fs.unlinkSync(file_location);
+            file_name = '';
+            file_content = '';
+
+            response.writeHead(302, {Location : '/'});
+            response.end('rmFIle success');
+        });
 
     }
     else if (pathname === '/renameFormat') {
@@ -239,6 +314,8 @@ var app = http.createServer(function (request, response) {
 
             //file_name = renamed;
             fs.renameSync(file_path, new_file_path);
+            file_name = '';
+            file_content = '';
 
             response.writeHead(302, { Location: '/' }); // 'http://localhost:3000/'
             response.end('rename success');
